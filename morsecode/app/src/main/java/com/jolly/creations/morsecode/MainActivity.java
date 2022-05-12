@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         encoded_text=findViewById(R.id.enoded_text);
         input=findViewById(R.id.input);
-
+//loader
         dialog = new Dialog(MainActivity.this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 
         dialog.setContentView(R.layout.dialog); // change to dialog.setContentView
@@ -88,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
 
        // final AnimationDrawable animcon = (AnimationDrawable) IVcon.getBackground(); // instead of getDrawable() use this
         dialog.setCancelable(false);
-
+//for sound 
         toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
         boolean isFlashAvailable = getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-
+//for light checking
         if (!isFlashAvailable) {
             showNoFlashError();
         }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         }
-
+//soundbutton
         sound = findViewById(R.id.sound);
         sound.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.show();
                 IVcon.startAnimation(rotate);
-    
+    //handler -> send process messages to queue
                 Handler h =new Handler() ;
                 h.postDelayed(new Runnable() {
                     public void run() {
@@ -127,14 +127,14 @@ public class MainActivity extends AppCompatActivity {
                             String s=input.getText().toString();
                             encoded_text.setText("");
                             StringBuilder t= new StringBuilder();
-    
+    //converting morse code
                             for (int i = 0;i<s.length(); i++)
                             {
                                 t.append(morseEncode(s.charAt(i)));
                             }
                             encoded_text.setText(t.toString());
         
-        
+        //sounding morse code
                             for (int i = 0;i<s.length(); i++)
                             {
                                 morseseps(morseEncode(s.charAt(i)));
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             }
             
         });
-
+// morse code text
         text = findViewById(R.id.text);
         text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                         String s=input.getText().toString();
                         encoded_text.setText("");
                         StringBuilder t= new StringBuilder();
-    
+    // converting morse code
                         for (int i = 0;i<s.length(); i++)
                         {
                             t.append(morseEncode(s.charAt(i)));
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+// light morse code
         light = findViewById(R.id.light);
         light.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,13 +192,13 @@ public class MainActivity extends AppCompatActivity {
                         String s=input.getText().toString();
                         encoded_text.setText("");
                         StringBuilder t= new StringBuilder();
-    
+        // converting morse code
                         for (int i = 0;i<s.length(); i++)
                         {
                             t.append(morseEncode(s.charAt(i)));
                         }
                         encoded_text.setText(t.toString());
-    
+    // converting to light
                         for (int i = 0;i<s.length(); i++)
                         {
                             //encoded_text.setText(encoded_text.getText().toString()+morseEncode(s.charAt(i)));
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         });
         alert.show();
     }
-
+// morse table
     String morseEncode(char x) {
 
         // refer to the Morse table
@@ -342,9 +342,9 @@ public class MainActivity extends AppCompatActivity {
         {
             switch(s.charAt(i))
             {
-                case '.': dotl(); break;
-                case '-': dashl(); break;
-                case '/': slashl(); break;
+                case '.': dotl(); break; // represet dot as single short flash
+                case '-': dashl(); break;// represet dash as single long flash
+                case '/': slashl(); break;// stops the light
                 case '|': slashl(); break;
             }
 
@@ -357,9 +357,9 @@ public class MainActivity extends AppCompatActivity {
         {
             switch(s.charAt(i))
             {
-                case '.': dots(); break;
-                case '-': dashs(); break;
-                case '/': slashs(); break;
+                case '.': dots(); break;// represet dot as single short tone sound
+                case '-': dashs(); break;// represet dash as single long tone sound
+                case '/': slashs(); break;// stops the tone
                 case '|': slashs(); break;
                 default:dialog.dismiss();break;
             }
@@ -372,9 +372,9 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                // encoded_text.setText(encoded_text.getText().toString()+".");
-                mCameraManager.setTorchMode(mCameraId, false);
-                Thread.sleep(100);
-                mCameraManager.setTorchMode(mCameraId, true);
+                mCameraManager.setTorchMode(mCameraId, false); //torch off
+                Thread.sleep(100);//delay
+                mCameraManager.setTorchMode(mCameraId, true); // torch on
 
             } catch (CameraAccessException | InterruptedException e) {
                 e.printStackTrace();
@@ -387,9 +387,9 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                // encoded_text.setText(encoded_text.getText().toString()+"-");
-                mCameraManager.setTorchMode(mCameraId, false);
-                Thread.sleep(400);
-                mCameraManager.setTorchMode(mCameraId, true);
+                mCameraManager.setTorchMode(mCameraId, false); // torch off
+                Thread.sleep(400);//delay
+                mCameraManager.setTorchMode(mCameraId, true); // torch on
 
             } catch (CameraAccessException | InterruptedException e) {
                 e.printStackTrace();
@@ -402,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 mCameraManager.setTorchMode(mCameraId, false);
-                toneGen1.stopTone();
+                toneGen1.stopTone(); // tone stops
             } catch (CameraAccessException  e) {
                 e.printStackTrace();
             }
@@ -415,8 +415,8 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 toneGen1.stopTone();
-                Thread.sleep(100);
-                toneGen1.startTone(ToneGenerator.TONE_CDMA_HIGH_L,100);
+                Thread.sleep(100);//delay
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_HIGH_L,100); //starts tone
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -429,8 +429,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 toneGen1.stopTone();
-                Thread.sleep(400);
-                toneGen1.startTone(ToneGenerator.TONE_CDMA_HIGH_L,400);
+                Thread.sleep(400);//delay
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_HIGH_L,400); //starts tone
 
             } catch ( InterruptedException e) {
                 e.printStackTrace();
@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 mCameraManager.setTorchMode(mCameraId, false);
-                toneGen1.stopTone();
+                toneGen1.stopTone(); // tone stops
             } catch (CameraAccessException  e) {
                 e.printStackTrace();
             }
@@ -457,10 +457,10 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 if (status) {
-                    mCameraManager.setTorchMode(mCameraId, true);
+                    mCameraManager.setTorchMode(mCameraId, true); // torch on
                 }
                 else {
-                    mCameraManager.setTorchMode(mCameraId, false);
+                    mCameraManager.setTorchMode(mCameraId, false); // torch off
                 }
 
 
